@@ -34,6 +34,7 @@ export default function LoginScreen() {
         email,
         password,
       })
+
       if (result.error) {
         toast.error(result.error)
       }
