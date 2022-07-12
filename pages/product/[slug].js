@@ -13,9 +13,9 @@ import Layout from '../../components/Layout'
 
 export default function ProductScreen(props) {
   const router = useRouter()
+  const { state, dispatch } = useContext(Store)
 
   const { product } = props
-  const { state, dispatch } = useContext(Store)
 
   if (!product) {
     return <Layout title='Produt Not Found'>Produt Not Found</Layout>
@@ -24,13 +24,16 @@ export default function ProductScreen(props) {
   const addToCartHandler = async () => {
     const existItem = state.cart.cartItems.find((x) => x.slug === product.slug)
     const quantity = existItem ? existItem.quantity + 1 : 1
+
     const { data } = await axios.get(`/api/products/${product._id}`)
 
+    // 庫存 < 數量
     if (data.countInStock < quantity) {
       return toast.error('Sorry. Product is out of stock')
     }
 
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } })
+
     router.push('/cart')
   }
 

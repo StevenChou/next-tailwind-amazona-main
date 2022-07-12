@@ -18,6 +18,7 @@ export default function Layout({ title, children }) {
   const { state, dispatch } = useContext(Store)
   const { cart } = state
   const [cartItemsCount, setCartItemsCount] = useState(0)
+
   useEffect(() => {
     setCartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0))
   }, [cart.cartItems])
@@ -27,6 +28,7 @@ export default function Layout({ title, children }) {
     dispatch({ type: 'CART_RESET' })
     signOut({ callbackUrl: '/login' })
   }
+
   return (
     <>
       <Head>

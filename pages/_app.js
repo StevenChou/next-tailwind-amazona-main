@@ -1,8 +1,9 @@
-import '../styles/globals.css';
-import { SessionProvider, useSession } from 'next-auth/react';
-import { StoreProvider } from '../utils/Store';
-import { useRouter } from 'next/router';
-import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { SessionProvider, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import { PayPalScriptProvider } from '@paypal/react-paypal-js'
+
+import '../styles/globals.css'
+import { StoreProvider } from '../utils/Store'
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
@@ -19,25 +20,25 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         </PayPalScriptProvider>
       </StoreProvider>
     </SessionProvider>
-  );
+  )
 }
 
 function Auth({ children, adminOnly }) {
-  const router = useRouter();
+  const router = useRouter()
   const { status, data: session } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push('/unauthorized?message=login required');
+      router.push('/unauthorized?message=login required')
     },
-  });
+  })
   if (status === 'loading') {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
   if (adminOnly && !session.user.isAdmin) {
-    router.push('/unauthorized?message=admin login required');
+    router.push('/unauthorized?message=admin login required')
   }
 
-  return children;
+  return children
 }
 
-export default MyApp;
+export default MyApp
