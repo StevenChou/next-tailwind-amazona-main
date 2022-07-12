@@ -26,6 +26,7 @@ function CartScreen() {
     const quantity = Number(qty)
     const { data } = await axios.get(`/api/products/${item._id}`)
 
+    // 檢查庫存量
     if (data.countInStock < quantity) {
       return toast.error('Sorry. Product is out of stock')
     }
