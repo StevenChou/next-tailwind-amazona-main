@@ -121,4 +121,5 @@ function CartScreen() {
   )
 }
 
+// 原本在這頁 refresh 後，因為 cookie 資料不一致，會導致 Hydration failed
 export default dynamic(() => Promise.resolve(CartScreen), { ssr: false })

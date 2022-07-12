@@ -22,6 +22,7 @@ function reducer(state, action) {
           )
         : [...state.cart.cartItems, newItem]
 
+      // 更新 cookie 中，購物車資料
       Cookies.set('cart', JSON.stringify({ ...state.cart, cartItems }))
 
       return { ...state, cart: { ...state.cart, cartItems } }
@@ -32,6 +33,7 @@ function reducer(state, action) {
         (item) => item.slug !== action.payload.slug
       )
 
+      // 更新 cookie 中，購物車資料
       Cookies.set('cart', JSON.stringify({ ...state.cart, cartItems }))
 
       return { ...state, cart: { ...state.cart, cartItems } }
