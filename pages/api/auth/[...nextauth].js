@@ -12,6 +12,7 @@ export default NextAuth({
   },
   callbacks: {
     async jwt({ token, user }) {
+      console.log('**** user:', user)
       // user._id 來自於 DB，token 則存在於 NextAuth 中
       if (user?._id) token._id = user._id
       if (user?.isAdmin) token.isAdmin = user.isAdmin
@@ -21,6 +22,9 @@ export default NextAuth({
     async session({ session, token }) {
       if (token?._id) session.user._id = token._id
       if (token?.isAdmin) session.user.isAdmin = token.isAdmin
+
+      console.log('**** token:', token)
+      console.log('**** session:', session)
 
       return session
     },
