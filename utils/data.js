@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcryptjs'
 
 const data = {
   users: [
@@ -89,6 +89,6 @@ const data = {
       description: 'A popular pants',
     },
   ],
-};
+}
 
-export default data;
+export default data
