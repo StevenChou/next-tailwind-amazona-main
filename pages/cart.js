@@ -1,13 +1,15 @@
-import Image from 'next/image'
-import Link from 'next/link'
 import React, { useContext } from 'react'
-import { XCircleIcon } from '@heroicons/react/outline'
-import Layout from '../components/Layout'
-import { Store } from '../utils/Store'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { XCircleIcon } from '@heroicons/react/outline'
+
+import { Store } from '../utils/Store'
+
+import Layout from '../components/Layout'
 
 function CartScreen() {
   const router = useRouter()
@@ -15,18 +17,24 @@ function CartScreen() {
   const {
     cart: { cartItems },
   } = state
+
   const removeItemHandler = (item) => {
     dispatch({ type: 'CART_REMOVE_ITEM', payload: item })
   }
+
   const updateCartHandler = async (item, qty) => {
     const quantity = Number(qty)
     const { data } = await axios.get(`/api/products/${item._id}`)
+
     if (data.countInStock < quantity) {
       return toast.error('Sorry. Product is out of stock')
     }
+
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } })
+
     toast.success('Product updated in the cart')
   }
+
   return (
     <Layout title='Shopping Cart'>
       <h1 className='mb-4 text-xl'>Shopping Cart</h1>
@@ -57,7 +65,7 @@ function CartScreen() {
                             alt={item.name}
                             width={50}
                             height={50}
-                          ></Image>
+                          />
                           &nbsp;
                           {item.name}
                         </a>
