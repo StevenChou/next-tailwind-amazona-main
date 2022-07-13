@@ -16,6 +16,15 @@ export default function PaymentScreen() {
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('')
 
+  useEffect(() => {
+    if (!shippingAddress.address) {
+      return router.push('/shipping')
+    }
+
+    // 將 store 內的資料，填入 local state
+    setSelectedPaymentMethod(paymentMethod || '')
+  }, [paymentMethod, router, shippingAddress.address])
+
   const submitHandler = (e) => {
     e.preventDefault()
 
@@ -35,15 +44,6 @@ export default function PaymentScreen() {
 
     router.push('/placeorder')
   }
-
-  useEffect(() => {
-    if (!shippingAddress.address) {
-      return router.push('/shipping')
-    }
-
-    // 將 store 內的資料，填入 local state
-    setSelectedPaymentMethod(paymentMethod || '')
-  }, [paymentMethod, router, shippingAddress.address])
 
   return (
     <Layout title='Payment Method'>
