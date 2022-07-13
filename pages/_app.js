@@ -10,6 +10,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     <SessionProvider session={session}>
       <StoreProvider>
         <PayPalScriptProvider deferLoading={true}>
+          {/* component 是否需要登入後，才能使用 */}
           {Component.auth ? (
             <Auth adminOnly={Component.auth.adminOnly}>
               <Component {...pageProps} />
@@ -23,6 +24,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   )
 }
 
+// adminOnly 授權
 function Auth({ children, adminOnly }) {
   const router = useRouter()
   const { status, data: session } = useSession({
@@ -31,9 +33,11 @@ function Auth({ children, adminOnly }) {
       router.push('/unauthorized?message=login required')
     },
   })
+
   if (status === 'loading') {
     return <div>Loading...</div>
   }
+
   if (adminOnly && !session.user.isAdmin) {
     router.push('/unauthorized?message=admin login required')
   }
