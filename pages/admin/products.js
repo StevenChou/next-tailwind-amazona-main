@@ -94,11 +94,15 @@ export default function AdminProdcutsScreen() {
 
     try {
       dispatch({ type: 'DELETE_REQUEST' })
+
       await axios.delete(`/api/admin/products/${productId}`)
+
       dispatch({ type: 'DELETE_SUCCESS' })
+
       toast.success('Product deleted successfully')
     } catch (err) {
       dispatch({ type: 'DELETE_FAIL' })
+
       toast.error(getError(err))
     }
   }
