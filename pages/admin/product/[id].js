@@ -41,8 +41,8 @@ function reducer(state, action) {
   }
 }
 export default function AdminProductEditScreen() {
-  const { query } = useRouter()
-  const productId = query.id
+  const router = useRouter()
+  const productId = router.query.id
   const [{ loading, error, loadingUpdate, loadingUpload }, dispatch] =
     useReducer(reducer, {
       loading: true,
@@ -60,8 +60,11 @@ export default function AdminProductEditScreen() {
     const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' })
+
         const { data } = await axios.get(`/api/admin/products/${productId}`)
+
         dispatch({ type: 'FETCH_SUCCESS' })
+
         setValue('name', data.name)
         setValue('slug', data.slug)
         setValue('price', data.price)
@@ -78,12 +81,12 @@ export default function AdminProductEditScreen() {
     fetchData()
   }, [productId, setValue])
 
-  const router = useRouter()
-
   const uploadHandler = async (e, imageField = 'image') => {
     const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`
+
     try {
       dispatch({ type: 'UPLOAD_REQUEST' })
+
       const {
         data: { signature, timestamp },
       } = await axios('/api/admin/cloudinary-sign')
@@ -95,11 +98,15 @@ export default function AdminProductEditScreen() {
       formData.append('timestamp', timestamp)
       formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY)
       const { data } = await axios.post(url, formData)
+
       dispatch({ type: 'UPLOAD_SUCCESS' })
+
       setValue(imageField, data.secure_url)
+
       toast.success('File uploaded successfully')
     } catch (err) {
       dispatch({ type: 'UPLOAD_FAIL', payload: getError(err) })
+
       toast.error(getError(err))
     }
   }
@@ -116,6 +123,7 @@ export default function AdminProductEditScreen() {
   }) => {
     try {
       dispatch({ type: 'UPDATE_REQUEST' })
+
       await axios.put(`/api/admin/products/${productId}`, {
         name,
         slug,
@@ -126,11 +134,15 @@ export default function AdminProductEditScreen() {
         countInStock,
         description,
       })
+
       dispatch({ type: 'UPDATE_SUCCESS' })
+
       toast.success('Product updated successfully')
+
       router.push('/admin/products')
     } catch (err) {
       dispatch({ type: 'UPDATE_FAIL', payload: getError(err) })
+
       toast.error(getError(err))
     }
   }
@@ -182,6 +194,7 @@ export default function AdminProductEditScreen() {
                   <div className='text-red-500'>{errors.name.message}</div>
                 )}
               </div>
+
               <div className='mb-4'>
                 <label htmlFor='slug'>Slug</label>
                 <input
@@ -196,6 +209,7 @@ export default function AdminProductEditScreen() {
                   <div className='text-red-500'>{errors.slug.message}</div>
                 )}
               </div>
+
               <div className='mb-4'>
                 <label htmlFor='price'>Price</label>
                 <input
@@ -210,6 +224,7 @@ export default function AdminProductEditScreen() {
                   <div className='text-red-500'>{errors.price.message}</div>
                 )}
               </div>
+
               <div className='mb-4'>
                 <label htmlFor='image'>image</label>
                 <input
@@ -224,6 +239,7 @@ export default function AdminProductEditScreen() {
                   <div className='text-red-500'>{errors.image.message}</div>
                 )}
               </div>
+
               <div className='mb-4'>
                 <label htmlFor='imageFile'>Upload image</label>
                 <input
@@ -235,6 +251,7 @@ export default function AdminProductEditScreen() {
 
                 {loadingUpload && <div>Uploading....</div>}
               </div>
+
               <div className='mb-4'>
                 <label htmlFor='category'>category</label>
                 <input
@@ -263,6 +280,7 @@ export default function AdminProductEditScreen() {
                   <div className='text-red-500'>{errors.brand.message}</div>
                 )}
               </div>
+
               <div className='mb-4'>
                 <label htmlFor='countInStock'>countInStock</label>
                 <input
@@ -279,6 +297,7 @@ export default function AdminProductEditScreen() {
                   </div>
                 )}
               </div>
+
               <div className='mb-4'>
                 <label htmlFor='countInStock'>description</label>
                 <input
@@ -295,11 +314,13 @@ export default function AdminProductEditScreen() {
                   </div>
                 )}
               </div>
+
               <div className='mb-4'>
                 <button disabled={loadingUpdate} className='primary-button'>
                   {loadingUpdate ? 'Loading' : 'Update'}
                 </button>
               </div>
+
               <div className='mb-4'>
                 <Link href={`/admin/products`}>Back</Link>
               </div>
