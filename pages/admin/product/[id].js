@@ -1,11 +1,13 @@
-import axios from 'axios'
+import React, { useEffect, useReducer } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect, useReducer } from 'react'
+import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-import Layout from '../../../components/Layout'
+
 import { getError } from '../../../utils/error'
+
+import Layout from '../../../components/Layout'
 
 function reducer(state, action) {
   switch (action.type) {
