@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
-import { signIn, useSession } from 'next-auth/react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
-import { getError } from '../utils/error';
-import axios from 'axios';
-import Layout from '../components/Layout';
+import React, { useEffect } from 'react'
+import { signIn, useSession } from 'next-auth/react'
+import axios from 'axios'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
+
+import { getError } from '../utils/error'
+
+import Layout from '../components/Layout'
 
 export default function ProfileScreen() {
-  const { data: session } = useSession();
+  const { data: session } = useSession()
 
   const {
     handleSubmit,
@@ -15,12 +17,12 @@ export default function ProfileScreen() {
     getValues,
     setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm()
 
   useEffect(() => {
-    setValue('name', session.user.name);
-    setValue('email', session.user.email);
-  }, [session.user, setValue]);
+    setValue('name', session.user.name)
+    setValue('email', session.user.email)
+  }, [session.user, setValue])
 
   const submitHandler = async ({ name, email, password }) => {
     try {
@@ -28,51 +30,55 @@ export default function ProfileScreen() {
         name,
         email,
         password,
-      });
+      })
+
+      // 要通知 NextAuth 認證資料已經更新
       const result = await signIn('credentials', {
         redirect: false,
         email,
         password,
-      });
-      toast.success('Profile updated successfully');
+      })
+
+      toast.success('Profile updated successfully')
+
       if (result.error) {
-        toast.error(result.error);
+        toast.error(result.error)
       }
     } catch (err) {
-      toast.error(getError(err));
+      toast.error(getError(err))
     }
-  };
+  }
 
   return (
-    <Layout title="Profile">
+    <Layout title='Profile'>
       <form
-        className="mx-auto max-w-screen-md"
+        className='mx-auto max-w-screen-md'
         onSubmit={handleSubmit(submitHandler)}
       >
-        <h1 className="mb-4 text-xl">Update Profile</h1>
+        <h1 className='mb-4 text-xl'>Update Profile</h1>
 
-        <div className="mb-4">
-          <label htmlFor="name">Name</label>
+        <div className='mb-4'>
+          <label htmlFor='name'>Name</label>
           <input
-            type="text"
-            className="w-full"
-            id="name"
+            type='text'
+            className='w-full'
+            id='name'
             autoFocus
             {...register('name', {
               required: 'Please enter name',
             })}
           />
           {errors.name && (
-            <div className="text-red-500">{errors.name.message}</div>
+            <div className='text-red-500'>{errors.name.message}</div>
           )}
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="email">Email</label>
+        <div className='mb-4'>
+          <label htmlFor='email'>Email</label>
           <input
-            type="email"
-            className="w-full"
-            id="email"
+            type='email'
+            className='w-full'
+            id='email'
             {...register('email', {
               required: 'Please enter email',
               pattern: {
@@ -82,31 +88,31 @@ export default function ProfileScreen() {
             })}
           />
           {errors.email && (
-            <div className="text-red-500">{errors.email.message}</div>
+            <div className='text-red-500'>{errors.email.message}</div>
           )}
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="password">Password</label>
+        <div className='mb-4'>
+          <label htmlFor='password'>Password</label>
           <input
-            className="w-full"
-            type="password"
-            id="password"
+            className='w-full'
+            type='password'
+            id='password'
             {...register('password', {
               minLength: { value: 6, message: 'password is more than 5 chars' },
             })}
           />
           {errors.password && (
-            <div className="text-red-500 ">{errors.password.message}</div>
+            <div className='text-red-500 '>{errors.password.message}</div>
           )}
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="confirmPassword">Confirm Password</label>
+        <div className='mb-4'>
+          <label htmlFor='confirmPassword'>Confirm Password</label>
           <input
-            className="w-full"
-            type="password"
-            id="confirmPassword"
+            className='w-full'
+            type='password'
+            id='confirmPassword'
             {...register('confirmPassword', {
               validate: (value) => value === getValues('password'),
               minLength: {
@@ -116,21 +122,22 @@ export default function ProfileScreen() {
             })}
           />
           {errors.confirmPassword && (
-            <div className="text-red-500 ">
+            <div className='text-red-500 '>
               {errors.confirmPassword.message}
             </div>
           )}
           {errors.confirmPassword &&
             errors.confirmPassword.type === 'validate' && (
-              <div className="text-red-500 ">Password do not match</div>
+              <div className='text-red-500 '>Password do not match</div>
             )}
         </div>
-        <div className="mb-4">
-          <button className="primary-button">Update Profile</button>
+
+        <div className='mb-4'>
+          <button className='primary-button'>Update Profile</button>
         </div>
       </form>
     </Layout>
-  );
+  )
 }
 
-ProfileScreen.auth = true;
+ProfileScreen.auth = true
